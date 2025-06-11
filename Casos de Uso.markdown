@@ -27,7 +27,7 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 
 ### 3.1. Administrador
 
-#### CU-01 – Gestión de Usuarios (ABM de Usuarios)
+#### CU-01 – Gestión de Usuarios (ABM de Usuarios) *
 
 **Actor principal**: Administrador  
 **Descripción**: El Administrador puede dar de alta, modificar o eliminar usuarios del sistema, asignando roles (Voluntario, Mediador, Superusuario, etc.). Un superusuario tiene permisos para realizar todas las acciones de cualquier rol.  
@@ -61,7 +61,7 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 
 ---
 
-#### CU-03 – Gestión de Becarios, Padrinos y Mediadores (ABM)
+#### CU-03 – Gestión de Becarios, Padrinos y Mediadores (ABM) *
 
 **Actor principal**: Administrador  
 **Descripción**: Gestión individual de becarios, padrinos y mediadores, incluyendo asignación de relaciones.  
@@ -88,7 +88,7 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 
 ---
 
-#### CU-06 – Gestión de Cartas
+#### CU-06 – Gestión de Cartas *
 
 **Actor principal**: Administrador  
 **Descripción**: El Administrador puede modificar cualquier aspecto de cualquier carta en el sistema, incluyendo estado, observaciones, imágenes, orden de archivos, y metadatos (becario, padrino, mediador), sin restricciones de asignación o estado.  
@@ -174,7 +174,7 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 
 ---
 
-#### CU-09 – Administración de Formato de Correo
+#### CU-09 – Administración de Formato de Correo *
 
 **Actor principal**: Administrador  
 **Descripción**: Define la plantilla y contenido del correo que se enviará con las cartas.  
@@ -199,7 +199,7 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 
 ---
 
-#### CU-10 – Envío Programado de Cartas por Correo Electrónico
+#### CU-10 – Envío Programado de Cartas por Correo Electrónico *
 
 **Actor principal**: Sistema (automático)  
 **Actor secundario**: Administrador (configura fecha y formato)  
@@ -251,7 +251,7 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 
 ---
 
-#### CU-V02 – Seleccionar Carta para Revisión
+#### CU-V02 – Seleccionar Carta para Revisión *
 
 **Actor principal**: Voluntario  
 **Descripción**: El Voluntario selecciona una carta disponible en el repositorio para revisarla, asignándola exclusivamente a sí mismo. La carta deja de mostrarse en el repositorio principal para otros Voluntarios, pero sigue visible para los Administradores.  
@@ -274,7 +274,7 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 
 ---
 
-#### CU-V03 – Revisar Carta Asignada
+#### CU-V03 – Revisar Carta Asignada *
 
 **Actor principal**: Voluntario  
 **Descripción**: El Voluntario revisa una carta asignada, modificando su estado según la evaluación realizada y, opcionalmente, agregando observaciones para documentar la revisión, aprobación o rechazo.  
@@ -303,7 +303,7 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 
 ---
 
-#### CU-V04 – Descargar Carta
+#### CU-V04 – Descargar Carta *
 
 **Actor principal**: Voluntario  
 **Descripción**: El Voluntario puede descargar una carta asignada o disponible para revisión en el repositorio, excluyendo cartas de becarios universitarios.  
@@ -321,7 +321,7 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 
 ---
 
-#### CU-V05 – Subir Nueva Versión de la Imagen de la Carta
+#### CU-V05 – Subir Nueva Versión de la Imagen de la Carta * 
 
 **Actor principal**: Voluntario  
 **Descripción**: El Voluntario puede subir una única nueva versión de las imágenes de una carta asignada (PDF, JPG, PNG), sobrescribiendo cualquier nueva versión existente pero conservando siempre la versión original. El sistema utiliza la nueva versión para visualización y envío, con fallback a la versión original si no existe una nueva versión o si esta se elimina. El Voluntario también puede eliminar la nueva versión, revirtiendo al uso de la original.  
@@ -378,7 +378,7 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 
 ### 3.3. Mediador
 
-#### CU-M01 – Visualización de Becarios Asignados y sus Datos
+#### CU-M01 – Visualización de Becarios Asignados y sus Datos * 
 
 **Actor principal**: Mediador  
 **Descripción**: El Mediador puede visualizar la lista de becarios asignados, sus datos personales y los datos de sus padrinos.  
@@ -391,7 +391,7 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 4. Consultar información del becario y sus padrinos.  
    **Postcondición**: Información consultada correctamente.
 
-#### CU-M02 – Alta de Carta
+#### CU-M02 – Alta de Carta * 
 
 **Actor principal**: Mediador  
 **Descripción**: El Mediador puede subir nuevas cartas al sistema, seleccionando el becario y los padrinos destinatarios.  
@@ -413,7 +413,7 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 
 ---
 
-#### CU-M03 – Modificación de Carta Existente
+#### CU-M03 – Modificación de Carta Existente * 
 
 **Actor principal**: Mediador  
 **Descripción**: Permite modificar una carta previamente cargada por el Mediador, dentro del período habilitado.  
@@ -433,7 +433,7 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 
 ---
 
-#### CU-M04 – Eliminación de Carta
+#### CU-M04 – Eliminación de Carta *
 
 **Actor principal**: Mediador  
 **Descripción**: Elimina una carta cargada por el Mediador si no ha sido procesada o aprobada.  
@@ -462,7 +462,7 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 
 ### 3.4. Becario Universitario
 
-#### CU-BU01 – Visualización de su Información y Padrinos
+#### CU-BU01 – Visualización de su Información y Padrinos *
 
 **Actor principal**: Becario Universitario  
 **Descripción**: Permite visualizar sus propios datos personales y los datos de sus padrinos asignados.  
@@ -476,7 +476,7 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 
 ---
 
-#### CU-BU02 – Alta de Carta Personal
+#### CU-BU02 – Alta de Carta Personal *
 
 **Actor principal**: Becario Universitario  
 **Descripción**: Permite cargar cartas propias, dirigiéndolas a sus padrinos.  
@@ -497,7 +497,7 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 
 ---
 
-#### CU-BU03 – Modificación de Carta Propia
+#### CU-BU03 – Modificación de Carta Propia *
 
 **Actor principal**: Becario Universitario  
 **Descripción**: Edita una carta previamente subida, si no ha sido enviada o aprobada.  
@@ -517,7 +517,7 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 
 ---
 
-#### CU-BU04 – Eliminación de Carta Propia
+#### CU-BU04 – Eliminación de Carta Propia *
 
 **Actor principal**: Becario Universitario  
 **Descripción**: Elimina una carta propia si no fue aprobada ni enviada.  
