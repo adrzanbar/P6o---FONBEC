@@ -41,6 +41,8 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 5. Guardar cambios.  
    **Postcondición**: La lista de usuarios queda actualizada.
 
+---
+
 #### CU-02 – Importar Información de Sistemas Externos
 
 **Actor principal**: Administrador  
@@ -57,6 +59,8 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 -   Rechazo de registros duplicados o inválidos.  
     **Postcondición**: Nuevas entidades cargadas al sistema.
 
+---
+
 #### CU-03 – Gestión de Becarios, Padrinos y Mediadores (ABM)
 
 **Actor principal**: Administrador  
@@ -69,6 +73,8 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 4. Asignar relaciones (becario ↔ padrino, mediador ↔ becario).  
    **Postcondición**: Datos actualizados en la base del sistema.
 
+---
+
 #### CU-04 – Acceso al Repositorio de Cartas
 
 **Actor principal**: Administrador  
@@ -79,6 +85,8 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 2. Visualizar listado de cartas.
 3. Descargar o ver detalles.  
    **Postcondición**: Acceso de solo lectura al repositorio completo.
+
+---
 
 #### CU-06 – Gestión de Cartas
 
@@ -117,6 +125,8 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 -   Todas las modificaciones (estado, observaciones, imágenes, metadatos) se registran en el historial de la carta, incluyendo el Administrador y la fecha/hora.  
     **Postcondición**: Los cambios realizados (estado, observaciones, metadatos, imágenes, orden) se actualizan en el sistema, la versión original se conserva, y el historial refleja las modificaciones.
 
+---
+
 #### CU-06 – Filtrado de Cartas por Criterios
 
 **Actor principal**: Administrador  
@@ -135,6 +145,8 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 3. Realizar acciones sobre las cartas (descargar, observar estado).  
    **Postcondición**: Cartas filtradas correctamente.
 
+---
+
 #### CU-07 – Configuración de Fechas de Subida Límite
 
 **Actor principal**: Administrador  
@@ -147,6 +159,8 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
    **Reglas de negocio**: Las cartas cargadas después de la fecha se marcan como “Fuera de término”.  
    **Postcondición**: Fecha límite registrada.
 
+---
+
 #### CU-08 – Configuración de Fecha de Envío
 
 **Actor principal**: Administrador  
@@ -157,6 +171,8 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 2. Establecer fecha de envío.
 3. Confirmar.  
    **Postcondición**: Fecha registrada; usada para marcar envíos “Fuera de término” si se incumple.
+
+---
 
 #### CU-09 – Administración de Formato de Correo
 
@@ -180,6 +196,8 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 3. Previsualizar.
 4. Guardar.  
    **Postcondición**: Plantilla de correo actualizada para envíos.
+
+---
 
 #### CU-10 – Envío Programado de Cartas por Correo Electrónico
 
@@ -393,6 +411,8 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 -   Se registra la fecha de carga y el usuario.  
     **Postcondición**: Carta cargada correctamente, asociada al becario y al/los padrino/s.
 
+---
+
 #### CU-M03 – Modificación de Carta Existente
 
 **Actor principal**: Mediador  
@@ -410,6 +430,8 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 5. Establecer nuevo orden si corresponde.
 6. Confirmar modificación.  
    **Postcondición**: Carta actualizada.
+
+---
 
 #### CU-M04 – Eliminación de Carta
 
@@ -452,6 +474,8 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 3. Visualizar listado de padrinos asociados.  
    **Postcondición**: Información consultada correctamente.
 
+---
+
 #### CU-BU02 – Alta de Carta Personal
 
 **Actor principal**: Becario Universitario  
@@ -471,6 +495,8 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 -   Solo puede gestionar su propia información.  
     **Postcondición**: Carta cargada correctamente, asociada al becario universitario.
 
+---
+
 #### CU-BU03 – Modificación de Carta Propia
 
 **Actor principal**: Becario Universitario  
@@ -489,6 +515,8 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 6. Confirmar cambios.  
    **Postcondición**: Carta modificada correctamente.
 
+---
+
 #### CU-BU04 – Eliminación de Carta Propia
 
 **Actor principal**: Becario Universitario  
@@ -500,6 +528,8 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 2. Seleccionar carta a eliminar.
 3. Confirmar eliminación.  
    **Postcondición**: Carta eliminada del sistema.
+
+---
 
 #### CU-BU05 – Ordenar Archivos de la Carta
 
@@ -514,4 +544,3 @@ Este documento detalla los casos de uso del sistema de gestión de cartas de Fon
 4. Confirmar nuevo orden.  
    **Postcondición**: Orden de archivos actualizados.
 
----
