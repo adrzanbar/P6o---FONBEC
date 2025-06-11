@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Configurar Formato de Correo - Fonbec</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <h1>Configurar Formato de Correo</h1>
+            <div class="section">
+                <h2>Plantilla de Correo</h2>
+                <input
+                    type="text"
+                    id="emailHeader"
+                    placeholder="URL Imagen Cabecera"
+                />
+                <input type="text" id="emailSubject" placeholder="Asunto" />
+                <input
+                    type="text"
+                    id="emailTitle"
+                    placeholder="Título (Ej: Estimado/a)"
+                />
+                <textarea
+                    id="emailBody"
+                    placeholder="Cuerpo del texto"
+                ></textarea>
+                <input type="text" id="emailFarewell" placeholder="Despedida" />
+                <input
+                    type="text"
+                    id="emailThanks"
+                    placeholder="Agradecimiento"
+                />
+                <input
+                    type="text"
+                    id="emailFooter"
+                    placeholder="URL Imagen Pie"
+                />
+                <input
+                    type="text"
+                    id="emailLinks"
+                    placeholder="Enlaces (separados por comas)"
+                />
+                <textarea
+                    id="emailSignature"
+                    placeholder="Firma (datos de contacto)"
+                ></textarea>
+                <button onclick="previewEmail()">Previsualizar</button>
+                <button onclick="saveEmailConfig()">Guardar</button>
+                <div id="emailPreview" class="preview hidden">
+                    <h3>Vista Previa del Correo</h3>
+                    <div id="previewContent"></div>
+                </div>
+            </div>
+        </div>
+        <script src="scripts.js"></script>
+        <script>
+            function previewEmail() {
+                const config = {
+                    header:
+                        document.getElementById("emailHeader").value ||
+                        "Sin imagen",
+                    subject:
+                        document.getElementById("emailSubject").value ||
+                        "Sin asunto",
+                    title:
+                        document.getElementById("emailTitle").value ||
+                        "Sin título",
+                    body:
+                        document.getElementById("emailBody").value ||
+                        "Sin cuerpo",
+                    farewell:
+                        document.getElementById("emailFarewell").value ||
+                        "Sin despedida",
+                    thanks:
+                        document.getElementById("emailThanks").value ||
+                        "Sin agradecimiento",
+                    footer:
+                        document.getElementById("emailFooter").value ||
+                        "Sin imagen",
+                    links:
+                        document.getElementById("emailLinks").value ||
+                        "Sin enlaces",
+                    signature:
+                        document.getElementById("emailSignature").value ||
+                        "Sin firma",
+                };
+                const previewContent =
+                    document.getElementById("previewContent");
+                previewContent.innerHTML = `
+        <p><strong>Asunto:</strong> ${config.subject}</p>
+        <p><img src="${config.header}" alt="Cabecera" style="max-width:100%;"></p>
+        <p><strong>${config.title}</strong></p>
+        <p>${config.body}</p>
+        <p>${config.farewell}</p>
+        <p>${config.thanks}</p>
+        <p><img src="${config.footer}" alt="Pie" style="max-width:100%;"></p>
+        <p>Enlaces: ${config.links}</p>
+        <p>${config.signature}</p>
+      `;
+                document
+                    .getElementById("emailPreview")
+                    .classList.remove("hidden");
+            }
+
+            function saveEmailConfig() {
+                const config = {
+                    header: document.getElementById("emailHeader").value,
+                    subject: document.getElementById("emailSubject").value,
+                    title: document.getElementById("emailTitle").value,
+                    body: document.getElementById("emailBody").value,
+                    farewell: document.getElementById("emailFarewell").value,
+                    thanks: document.getElementById("emailThanks").value,
+                    footer: document.getElementById("emailFooter").value,
+                    links: document.getElementById("emailLinks").value,
+                    signature: document.getElementById("emailSignature").value,
+                };
+                console.log("Formato de correo guardado:", config);
+                alert("Formato guardado");
+                document.getElementById("emailPreview").classList.add("hidden");
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Panel de Voluntario - Fonbec</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <h1>Panel de Voluntario</h1>
+            <div class="section">
+                <h2>Repositorio de Cartas</h2>
+                <!-- Filtros (CU-V03) -->
+                <input type="text" id="filterBecario" placeholder="Becario" />
+                <input type="text" id="filterPadrino" placeholder="Padrino" />
+                <input type="text" id="filterMediador" placeholder="Mediador" />
+                <input type="date" id="filterFecha" placeholder="Fecha" />
+                <select id="filterEstado">
+                    <option value="">Todos los estados</option>
+                    <option value="Subida">Subida</option>
+                    <option value="Asignada">Asignada</option>
+                    <option value="Aprobada">Aprobada</option>
+                    <option value="Desaprobada">Desaprobada</option>
+                    <option value="Pendiente de envío">
+                        Pendiente de envío
+                    </option>
+                    <option value="Enviada">Enviada</option>
+                </select>
+                <button onclick="filterLetters()">Filtrar</button>
+                <!-- Tabla de cartas (CU-V03, CU-V07) -->
+                <table id="lettersTable">
+                    <thead>
+                        <tr>
+                            <th>Becario</th>
+                            <th>Padrino</th>
+                            <th>Mediador</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lettersBody"></tbody>
+                </table>
+            </div>
+            <!-- Detalle de carta (CU-V01, CU-V02, CU-V04, CU-V05, CU-V06) -->
+            <div id="letterDetail" class="section hidden">
+                <h2>Detalles de la Carta</h2>
+                <p id="detailInfo"></p>
+                <!-- Cambiar estado (CU-V01) -->
+                <select id="letterState">
+                    <option value="Asignada">Asignada</option>
+                    <option value="Aprobada">Aprobada</option>
+                    <option value="Desaprobada">Desaprobada</option>
+                    <option value="Pendiente de envío">
+                        Pendiente de envío
+                    </option>
+                    <option value="Enviada">Enviada</option>
+                </select>
+                <button onclick="updateLetterState()">Actualizar Estado</button>
+                <!-- Agregar observaciones (CU-V02) -->
+                <textarea
+                    id="observation"
+                    placeholder="Escriba una observación"
+                ></textarea>
+                <button onclick="addObservation()">Guardar Observación</button>
+                <div id="observationsList"></div>
+                <!-- Subir nueva versión (CU-V05) -->
+                <input type="file" id="newVersion" accept=".pdf,.jpg,.png" />
+                <button onclick="uploadNewVersion()">
+                    Subir Nueva Versión
+                </button>
+                <!-- Ordenar archivos (CU-V06) -->
+                <h3>Archivos</h3>
+                <ul id="fileList" class="file-list"></ul>
+                <button
+                    id="saveOrderBtn"
+                    class="hidden"
+                    onclick="saveFileOrder()"
+                >
+                    Guardar Orden
+                </button>
+                <!-- Descargar (CU-V04) -->
+                <button onclick="downloadCurrentLetter()">
+                    Descargar Carta
+                </button>
+            </div>
+        </div>
+        <script src="scripts.js"></script>
+        <script>
+            let currentLetterId = null;
+            const volunteerEmail = "voluntario1@correo.com"; // Simulación de usuario autenticado
+
+            // Actualizar tabla de cartas (CU-V03, CU-V07)
+            function updateLettersTable(filtered = letters) {
+                const tbody = document.getElementById("lettersBody");
+                tbody.innerHTML = "";
+                filtered.forEach((letter) => {
+                    if (letter.becario.includes("Universitario")) return; // Excluir becarios universitarios
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+          <td>${letter.becario}</td>
+          <td>${letter.padrino}</td>
+          <td>${letter.mediador}</td>
+          <td>${letter.fecha}</td>
+          <td>${letter.estado}</td>
+          <td>
+            ${
+                letter.estado === "Subida" && !letter.assignedTo
+                    ? `<button onclick="selectLetter(${letter.id})">Seleccionar</button>`
+                    : letter.assignedTo === volunteerEmail
+                    ? `<button onclick="showLetterDetail(${letter.id})">Revisar</button>`
+                    : ""
+            }
+            <button onclick="showDetails(${letter.id})">Detalles</button>
+            <button onclick="downloadLetter(${letter.id})">Descargar</button>
+          </td>
+        `;
+                    tbody.appendChild(row);
+                });
+            }
+
+            // Filtrar cartas (CU-V03)
+            function filterLetters() {
+                const becario = document
+                    .getElementById("filterBecario")
+                    .value.toLowerCase();
+                const padrino = document
+                    .getElementById("filterPadrino")
+                    .value.toLowerCase();
+                const mediador = document
+                    .getElementById("filterMediador")
+                    .value.toLowerCase();
+                const fecha = document.getElementById("filterFecha").value;
+                const estado = document.getElementById("filterEstado").value;
+                const filtered = letters.filter(
+                    (l) =>
+                        (!becario ||
+                            l.becario.toLowerCase().includes(becario)) &&
+                        (!padrino ||
+                            l.padrino.toLowerCase().includes(padrino)) &&
+                        (!mediador ||
+                            l.mediador.toLowerCase().includes(mediador)) &&
+                        (!fecha || l.fecha === fecha) &&
+                        (!estado || l.estado === estado)
+                );
+                updateLettersTable(filtered);
+            }
+
+            // Seleccionar carta para revisión (CU-V07)
+            function selectLetter(id) {
+                const letter = letters.find((l) => l.id === id);
+                if (letter.estado !== "Subida" || letter.assignedTo) {
+                    showError("Esta carta no está disponible para selección");
+                    return;
+                }
+                letter.estado = "Asignada";
+                letter.assignedTo = volunteerEmail;
+                console.log(`Carta ${id} asignada a ${volunteerEmail}`);
+                alert("Carta seleccionada y asignada");
+                updateLettersTable();
+            }
+
+            // Mostrar detalles de carta (CU-V01, CU-V02, CU-V04, CU-V05, CU-V06)
+            function showLetterDetail(id) {
+                const letter = letters.find((l) => l.id === id);
+                if (letter.assignedTo !== volunteerEmail) {
+                    showError("No tienes permiso para revisar esta carta");
+                    return;
+                }
+                currentLetterId = id;
+                document
+                    .getElementById("letterDetail")
+                    .classList.remove("hidden");
+                document.getElementById(
+                    "detailInfo"
+                ).textContent = `Carta ${id} - Becario: ${letter.becario}, Padrino: ${letter.padrino}`;
+                document.getElementById("letterState").value = letter.estado;
+
+                // Mostrar observaciones
+                const obsList = document.getElementById("observationsList");
+                obsList.innerHTML =
+                    "<h3>Observaciones</h3>" +
+                    letter.observations
+                        .map(
+                            (o) =>
+                                `<p>${o.timestamp} - ${o.user}: ${o.text}</p>`
+                        )
+                        .join("");
+
+                // Mostrar archivos
+                const fileList = document.getElementById("fileList");
+                fileList.innerHTML = "";
+                letter.files.forEach((file, index) => {
+                    const li = document.createElement("li");
+                    li.className = "file-item";
+                    li.innerHTML = `
+          ${file}
+          <div>
+            <button onclick="moveFile(${id}, ${index}, -1)">↑</button>
+            <button onclick="moveFile(${id}, ${index}, 1)">↓</button>
+          </div>
+        `;
+                    fileList.appendChild(li);
+                });
+                document
+                    .getElementById("saveOrderBtn")
+                    .classList.toggle("hidden", letter.files.length <= 1);
+            }
+
+            // Actualizar estado (CU-V01)
+            function updateLetterState() {
+                if (!currentLetterId)
+                    return showError("No hay carta seleccionada");
+                const letter = letters.find((l) => l.id === currentLetterId);
+                const newState = document.getElementById("letterState").value;
+                letter.estado = newState;
+                console.log(
+                    `Estado de carta ${currentLetterId} actualizado a ${newState}`
+                );
+                alert("Estado actualizado");
+                updateLettersTable();
+            }
+
+            // Agregar observación (CU-V02)
+            function addObservation() {
+                if (!currentLetterId)
+                    return showError("No hay carta seleccionada");
+                const text = document.getElementById("observation").value;
+                if (!text) return showError("Escriba una observación");
+                const letter = letters.find((l) => l.id === currentLetterId);
+                letter.observations.push({
+                    user: volunteerEmail,
+                    text,
+                    timestamp: new Date()
+                        .toISOString()
+                        .slice(0, 16)
+                        .replace("T", " "),
+                });
+                document.getElementById("observation").value = "";
+                showLetterDetail(currentLetterId);
+                console.log(`Observación añadida a carta ${currentLetterId}`);
+                alert("Observación guardada");
+            }
+
+            // Subir nueva versión (CU-V05)
+            function uploadNewVersion() {
+                if (!currentLetterId)
+                    return showError("No hay carta seleccionada");
+                const fileInput = document.getElementById("newVersion");
+                if (!fileInput.files.length)
+                    return showError("Seleccione un archivo");
+                const file = fileInput.files[0];
+                if (
+                    !["application/pdf", "image/jpeg", "image/png"].includes(
+                        file.type
+                    )
+                ) {
+                    return showError("Formato no válido (solo PDF, JPG, PNG)");
+                }
+                const letter = letters.find((l) => l.id === currentLetterId);
+                if (letter.files.length >= 3)
+                    return showError("Límite de 3 versiones alcanzado");
+                letter.files.push(file.name);
+                fileInput.value = "";
+                showLetterDetail(currentLetterId);
+                console.log(
+                    `Nueva versión subida para carta ${currentLetterId}: ${file.name}`
+                );
+                alert("Nueva versión subida");
+            }
+
+            // Ordenar archivos (CU-V06)
+            function moveFile(letterId, index, direction) {
+                const letter = letters.find((l) => l.id === letterId);
+                const newIndex = index + direction;
+                if (newIndex < 0 || newIndex >= letter.files.length) return;
+                [letter.files[index], letter.files[newIndex]] = [
+                    letter.files[newIndex],
+                    letter.files[index],
+                ];
+                showLetterDetail(letterId);
+            }
+
+            function saveFileOrder() {
+                if (!currentLetterId)
+                    return showError("No hay carta seleccionada");
+                console.log(
+                    `Orden de archivos guardado para carta ${currentLetterId}`
+                );
+                alert("Orden guardado");
+            }
+
+            // Descargar carta actual (CU-V04)
+            function downloadCurrentLetter() {
+                if (!currentLetterId)
+                    return showError("No hay carta seleccionada");
+                downloadLetter(currentLetterId);
+            }
+
+            // Cargar tabla al iniciar
+            updateLettersTable();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Repositorio de Cartas - Fonbec</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <h1>Repositorio de Cartas</h1>
+            <div class="section">
+                <h2>Filtrar Cartas</h2>
+                <input type="text" id="filterBecario" placeholder="Becario" />
+                <input type="text" id="filterPadrino" placeholder="Padrino" />
+                <input type="text" id="filterMediador" placeholder="Mediador" />
+                <input type="date" id="filterFecha" placeholder="Fecha" />
+                <select id="filterEstado">
+                    <option value="">Todos los estados</option>
+                    <option value="Subida">Subida</option>
+                    <option value="Asignada">Asignada</option>
+                    <option value="Aprobada">Aprobada</option>
+                    <option value="Desaprobada">Desaprobada</option>
+                    <option value="Pendiente de envío">
+                        Pendiente de envío
+                    </option>
+                    <option value="Enviada">Enviada</option>
+                </select>
+                <button onclick="filterLetters()">Filtrar</button>
+                <table id="lettersTable">
+                    <thead>
+                        <tr>
+                            <th>Becario</th>
+                            <th>Padrino</th>
+                            <th>Mediador</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lettersBody"></tbody>
+                </table>
+            </div>
+        </div>
+        <script src="scripts.js"></script>
+        <script>
+            function updateLettersTable(filtered = letters) {
+                const tbody = document.getElementById("lettersBody");
+                tbody.innerHTML = "";
+                filtered.forEach((letter) => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+          <td>${letter.becario}</td>
+          <td>${letter.padrino}</td>
+          <td>${letter.mediador}</td>
+          <td>${letter.fecha}</td>
+          <td>${letter.estado}</td>
+          <td>
+            <button onclick="downloadLetter(${letter.id})">Descargar</button>
+            <button onclick="showDetails(${letter.id})">Detalles</button>
+          </td>
+        `;
+                    tbody.appendChild(row);
+                });
+            }
+
+            function filterLetters() {
+                const becario = document
+                    .getElementById("filterBecario")
+                    .value.toLowerCase();
+                const padrino = document
+                    .getElementById("filterPadrino")
+                    .value.toLowerCase();
+                const mediador = document
+                    .getElementById("filterMediador")
+                    .value.toLowerCase();
+                const fecha = document.getElementById("filterFecha").value;
+                const estado = document.getElementById("filterEstado").value;
+                const filtered = letters.filter(
+                    (l) =>
+                        (!becario ||
+                            l.becario.toLowerCase().includes(becario)) &&
+                        (!padrino ||
+                            l.padrino.toLowerCase().includes(padrino)) &&
+                        (!mediador ||
+                            l.mediador.toLowerCase().includes(mediador)) &&
+                        (!fecha || l.fecha === fecha) &&
+                        (!estado || l.estado === estado)
+                );
+                updateLettersTable(filtered);
+            }
+
+            // Cargar tabla al iniciar
+            updateLettersTable();
+        </script>
+    </body>
+</html>

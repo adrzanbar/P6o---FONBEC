@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Importar Entidades - Fonbec</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <h1>Importar Entidades</h1>
+            <div class="section">
+                <h2>Cargar Datos Masivos</h2>
+                <select id="entityType">
+                    <option value="becario">Becario</option>
+                    <option value="padrino">Padrino</option>
+                    <option value="mediador">Mediador</option>
+                </select>
+                <input type="file" id="importFile" accept=".csv,.xlsx" />
+                <button onclick="previewImport()">Previsualizar</button>
+                <div id="preview" class="preview hidden">
+                    <h3>Previsualización de Datos</h3>
+                    <table id="previewTable">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="previewBody"></tbody>
+                    </table>
+                    <button onclick="confirmImport()">
+                        Confirmar Importación
+                    </button>
+                </div>
+            </div>
+        </div>
+        <script src="scripts.js"></script>
+        <script>
+            function previewImport() {
+                const fileInput = document.getElementById("importFile");
+                const entityType = document.getElementById("entityType").value;
+                if (!fileInput.files.length) {
+                    showError("Seleccione un archivo CSV o XLSX");
+                    return;
+                }
+                // Simulación de previsualización
+                const previewBody = document.getElementById("previewBody");
+                previewBody.innerHTML = `
+        <tr>
+          <td>Ejemplo ${entityType} 1</td>
+          <td>ejemplo1@correo.com</td>
+          <td>Válido</td>
+        </tr>
+        <tr>
+          <td>Ejemplo ${entityType} 2</td>
+          <td>inválido</td>
+          <td>Inválido (correo no válido)</td>
+        </tr>
+      `;
+                document.getElementById("preview").classList.remove("hidden");
+            }
+
+            function confirmImport() {
+                console.log("Importando datos...");
+                alert("Datos importados correctamente");
+                document.getElementById("preview").classList.add("hidden");
+            }
+        </script>
+    </body>
+</html>
