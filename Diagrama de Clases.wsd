@@ -1,0 +1,91 @@
+@startuml DiagramaDeClases
+left to right direction
+
+enum Rol {
+  ADMINISTRADOR
+  VOLUNTARIO
+  MEDIADOR
+  BECARIO_UNIVERSITARIO
+}
+
+enum EstadoCarta {
+  ASIGNADA
+  APROBADA
+  DESAPROBADA
+  ENVIADA
+  ENVIADA_FUERA_TERMINO
+}
+
+class Usuario {
+  +id: uuid
+  +email: string
+  +rol: Rol
+}
+
+class CartaPreliminar {
+  +id: uuid
+  +fechaSubida: date
+  +imagenes: Imagen[]
+  +moderador: Usuario
+  +becario: Becario
+  +padrinos: Padrino[]
+  +configuracion: Configuracion
+}
+
+class CartaParaEnviar {
+  +id: uuid
+  +cartaPreliminar: CartaPreliminar
+  +imagenes: Imagen[]
+  +voluntario: Usuario
+  +getEstado(): EstadoCarta
+}
+
+class Imagen {
+  +id: uuid
+  +ruta: string
+  +orden: int
+}
+
+class Becario {
+  +dni: int
+  +nombre: string
+  +sexo: string
+  +esUniversitario: bool
+  +padrinos: Padrino[]
+}
+
+class Padrino {
+  +dni: int
+  +nombre: string
+  +email: string
+}
+
+class PlantillaCorreo {
+  +id: uuid
+  +asunto: string
+  +cuerpo: string
+  +getImagenCabecera(): Imagen
+  +getImagenPie(): Imagen
+  +setImagenCabecera(imagen: Imagen)
+  +setImagenPie(imagen: Imagen)
+}
+
+class Configuracion {
+  +id: uuid
+  +nombre: string
+  +fechaLimiteSubida: date
+  +fechaObjetivoEnvio: date
+  +plantillaCorreo: PlantillaCorreo
+}
+
+CartaParaEnviar --> CartaPreliminar : cartaPreliminar
+CartaPreliminar --> Usuario : moderador
+CartaParaEnviar --> Usuario : voluntario
+CartaPreliminar --> Becario : emisor
+CartaPreliminar --> Padrino : receptores
+CartaPreliminar --> Configuracion : configuracion
+CartaPreliminar --> Imagen : imagenesOriginales
+CartaParaEnviar --> Imagen : imagenesParaEnviar
+Configuracion --> PlantillaCorreo : plantillaCorreo
+Becario --> Padrino : padrinos
+@enduml
