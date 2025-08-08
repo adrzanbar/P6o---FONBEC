@@ -65,7 +65,7 @@ public class Usuario implements UserDetails {
 
     private LocalDate fechaActualizacion;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "USUARIO_ROLE",
         joinColumns = @JoinColumn(name = "usuario_id"),
