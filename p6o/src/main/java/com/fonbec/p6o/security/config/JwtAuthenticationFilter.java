@@ -1,7 +1,9 @@
 package com.fonbec.p6o.security.config;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,19 +46,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader(AUTH_HEADER);
 
         if (authHeader == null || !authHeader.startsWith(TOKEN_PREFIX)) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Autorizacion requerida");
+            writeJsonError(response, HttpServletResponse.SC_UNAUTHORIZED, "Autorizacion requerida");
             return;
         }
 
-        String jwt = authHeader.substring(TOKEN_PREFIX.length()); 
+        String jwt = authHeader.substring(TOKEN_PREFIX.length());
         String username;
 
         try {
             username = jwtService.extractUsername(jwt);
         } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); 
-            response.getWriter().write("Token invalido o expirado");
+            writeJsonError(response, HttpServletResponse.SC_UNAUTHORIZED, "Token invalido o expirado");
             return;
         }
 
@@ -76,7 +76,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().write("Token invalido o expirado");
+        writeJsonError(response, HttpServletResponse.SC_UNAUTHORIZED, "Token inválido o expirado");
+    }
+
+    private void writeJsonError(HttpServletResponse response, int status, String message) throws IOException {
+        response.setStatus(status);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        String json = String.format(
+                "{\"status\":%d,\"error\":\"%s\",\"message\":\"%s\",\"timestamp\":\"%s\"}",
+                status,
+                HttpStatus.valueOf(status).getReasonPhrase(),
+                message,
+                LocalDateTime.now()
+        );
+
+        response.getWriter().write(json);
     }
 }

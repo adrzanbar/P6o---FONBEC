@@ -28,7 +28,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         String[] authorities = user.getRoles().stream()
-                .map(role -> role.getNombre().name()) // si usás enums
+                .map(role -> role.getNombre().name())
                 .toArray(String[]::new);
 
         return User
