@@ -1,10 +1,17 @@
 package com.fonbec.p6o.security.controller;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,9 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.fonbec.p6o.security.dto.JwtDTO;
 import com.fonbec.p6o.security.dto.LoginRequestDTO;
+import com.fonbec.p6o.security.exception.AuthenticationException;
 import com.fonbec.p6o.security.service.JwtService;
 
 import jakarta.validation.Valid;
@@ -34,16 +41,29 @@ public class AuthController {
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JwtDTO> login(@Valid @RequestBody LoginRequestDTO request) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String jwt = jwtService.generateToken(userDetails);
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String jwt = jwtService.generateToken(userDetails);
 
-        return ResponseEntity.ok(new JwtDTO(jwt));
+            return ResponseEntity.ok(new JwtDTO(jwt));
+
+        } catch (DisabledException e) {
+            throw new AuthenticationException(HttpStatus.UNAUTHORIZED, "Cuenta deshabilitada");
+        } catch (LockedException e) {
+            throw new AuthenticationException(HttpStatus.UNAUTHORIZED, "Cuenta bloqueada");
+        } catch (AccountExpiredException e) {
+            throw new AuthenticationException(HttpStatus.UNAUTHORIZED, "Cuenta expirada");
+        } catch (CredentialsExpiredException e) {
+            throw new AuthenticationException(HttpStatus.UNAUTHORIZED, "Credenciales expiradas");
+        } catch (BadCredentialsException e) {
+            throw new AuthenticationException(HttpStatus.UNAUTHORIZED, "Credenciales incorrectas");
+        } catch (Exception e) {
+            throw new AuthenticationException(HttpStatus.UNAUTHORIZED, "Ocurrio un error al autenticar", e);
+        }
     }
-
-
 
     @GetMapping(value = "/hola", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> login() {

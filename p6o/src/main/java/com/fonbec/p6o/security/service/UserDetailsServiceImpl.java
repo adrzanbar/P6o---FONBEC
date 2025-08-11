@@ -20,22 +20,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetailsServiceImpl(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-
-        Usuario user = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        String[] authorities = user.getRoles().stream()
-                .map(role -> role.getNombre().name())
-                .toArray(String[]::new);
-
-        return User
-                .withUsername(user.getEmail())
-                .password(user.getPassword())
-                .roles(authorities)
-                .build();
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
     }
 
 }
