@@ -27,16 +27,16 @@ public class UsuarioDTO {
     private String apellido;
 
     @NotBlank(message = "El email es obligatorio", groups = { Guardar.class, Actualizar.class })
-    @Size(max = 255, message = "El email debe tener menos de 255 caracteres")
-    @Email(message = "Debe proporcionar un email valido")
+    @Size(max = 255, message = "El email debe tener menos de 255 caracteres", groups = { Guardar.class, Actualizar.class })
+    @Email(message = "Debe proporcionar un email valido", groups = { Guardar.class, Actualizar.class })
     private String email;
 
     @NotBlank(message = "La contraseña es obligatoria" , groups = { Guardar.class, Actualizar.class })
-    @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
+    @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres", groups = { Guardar.class, Actualizar.class })
     private String password;
 
     @NotBlank(message = "Repita la contraseña", groups = { Guardar.class, Actualizar.class })
-    @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
+    @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres", groups = { Guardar.class, Actualizar.class })
     private String password2;
 
     @NotNull(message = "El estado habilitado es obligatorio", groups = { Actualizar.class })
@@ -66,6 +66,14 @@ public class UsuarioDTO {
     @NotEmpty(message = "Debe asignar al menos un rol", groups = { Guardar.class, Actualizar.class })
     @ValidRoles(message = "Uno o mas roles son invalidos", groups = { Guardar.class, Actualizar.class })
     private List<String> roles;
+
+    @AssertTrue(message = "Las contraseñas no coinciden", groups = { Guardar.class, Actualizar.class })
+    public boolean isPasswordsMatching() {
+        if (password == null || password2 == null) {
+            return false;
+        }
+        return password.equals(password2);
+    }
     
     public interface Guardar {
     }

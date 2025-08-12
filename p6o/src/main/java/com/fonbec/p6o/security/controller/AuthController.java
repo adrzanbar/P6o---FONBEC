@@ -79,7 +79,7 @@ public class AuthController {
             @Validated(UsuarioDTO.Guardar.class) @RequestBody UsuarioDTO usuarioDTO) {
         Usuario usuario = UsuarioMapper.toEntity(usuarioDTO);
         if (usuario != null) {
-            usuario = userDetailsServiceImpl.registrarUsuario(usuario);
+            usuario = userDetailsServiceImpl.guardar(usuario);
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
 
