@@ -19,4 +19,6 @@ public enum RoleEnum {
     public String getName() {
         return name;
     }
+
+    
 }

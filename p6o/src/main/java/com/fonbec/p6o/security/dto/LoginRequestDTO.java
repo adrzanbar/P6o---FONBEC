@@ -10,12 +10,14 @@ import lombok.Setter;
 @Setter
 public class LoginRequestDTO {
 
-    @NotBlank(message = "El email es obligatorio")
-    @Size(max = 255, message = "El email debe tener menos de 255 caracteres")
-    @Email(message = "Debe ser un email valido")
+    @NotBlank(message = "El email es obligatorio", groups = { Autenticar.class })
+    @Size(max = 255, message = "El email debe tener menos de 255 caracteres", groups = { Autenticar.class })
+    @Email(message = "Debe ser un email valido", groups = { Autenticar.class })
     private String email;
 
-    @NotBlank(message = "La contraseña es obligatoria")
-    @Size(min = 6, max = 100, message = "La contraseña debe tener entre 6 y 100 caracteres")
+    @NotBlank(message = "La contraseÃ±a es obligatoria", groups = { Autenticar.class })
+    @Size(min = 5, max = 100, message = "La contraseÃ±a debe tener entre 5 y 100 caracteres", groups = { Autenticar.class })
     private String password;
+
+    public interface Autenticar {}
 }

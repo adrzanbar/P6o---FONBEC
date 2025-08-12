@@ -33,7 +33,6 @@ public class Initializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        // Pre-cargar todos los roles si faltan
         Arrays.stream(RoleEnum.values()).forEach(roleEnum -> {
             roleRepository.findByNombre(roleEnum).orElseGet(() -> {
                 Role role = new Role();
@@ -42,7 +41,6 @@ public class Initializer implements CommandLineRunner {
             });
         });
         
-        // Pre-cargar un usuario administrador si no existe
         if (usuarioRepository.findByEmail("admin@fonbec.org").isEmpty()) {
             Role adminRole = roleRepository.findByNombre(RoleEnum.ADMINISTRADOR)
                 .orElseThrow(() -> new IllegalStateException("Rol ADMINISTRADOR no encontrado"));

@@ -2,9 +2,13 @@ package com.fonbec.p6o.security.config;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -40,8 +44,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
 
         String authHeader = request.getHeader(AUTH_HEADER);
 
@@ -61,14 +65,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            if (jwtService.isTokenValid(jwt, userDetailsService.loadUserByUsername(username))) {
+                List<String> roles = jwtService.extractRoles(jwt);
+                List<GrantedAuthority> authorities = roles.stream()
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
 
-            if (jwtService.isTokenValid(jwt, userDetails)) {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
-                        userDetails.getAuthorities()
-                );
+                        authorities);
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
                 filterChain.doFilter(request, response);
@@ -76,7 +84,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
-        writeJsonError(response, HttpServletResponse.SC_UNAUTHORIZED, "Token inválido o expirado");
+        writeJsonError(response, HttpServletResponse.SC_UNAUTHORIZED, "Token invalido o expirado");
     }
 
     private void writeJsonError(HttpServletResponse response, int status, String message) throws IOException {
@@ -89,8 +97,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 status,
                 HttpStatus.valueOf(status).getReasonPhrase(),
                 message,
-                LocalDateTime.now()
-        );
+                LocalDateTime.now());
 
         response.getWriter().write(json);
     }
