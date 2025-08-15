@@ -1,4 +1,4 @@
-package com.fonbec.p6o.security.exception;
+package com.fonbec.p6o.exception;
 
 import org.springframework.http.HttpStatus;
 
@@ -9,7 +9,6 @@ public class UsuarioException extends RuntimeException {
     public UsuarioException(HttpStatus status, String message) {
         super(message);
         this.status = status;
-        
     }
 
     public UsuarioException(HttpStatus status ,String message, Throwable cause) {

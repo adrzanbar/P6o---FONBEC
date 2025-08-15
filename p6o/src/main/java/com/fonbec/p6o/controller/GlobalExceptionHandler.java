@@ -13,7 +13,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.fonbec.p6o.security.exception.AuthenticationException;
+import com.fonbec.p6o.exception.AuthenticationException;
+import com.fonbec.p6o.exception.BaseServiceException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -60,7 +61,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex) {
         return buildResponse(HttpStatus.UNAUTHORIZED, "Error de autenticacion: " + ex.getMessage());
     }
-   
+
+
+    @ExceptionHandler(BaseServiceException.class)
+    public ResponseEntity<Object> handleBaseServiceException(BaseServiceException ex) {
+        return buildResponse(HttpStatus.UNAUTHORIZED, "Error de servicio: " + ex.getMessage());
+    }
 
     
     @ExceptionHandler(Exception.class)

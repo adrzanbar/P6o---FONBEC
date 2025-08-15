@@ -2,8 +2,11 @@ package com.fonbec.p6o.security.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,14 +14,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.fonbec.p6o.exception.UsuarioException;
 import com.fonbec.p6o.security.entity.Role;
 import com.fonbec.p6o.security.entity.Usuario;
-import com.fonbec.p6o.security.exception.UsuarioException;
 import com.fonbec.p6o.security.repository.RoleRepository;
 import com.fonbec.p6o.security.repository.UsuarioRepository;
+import com.fonbec.p6o.service.BaseService;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl extends BaseService<Usuario,String> implements UserDetailsService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
@@ -27,6 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetailsServiceImpl(UsuarioRepository usuarioRepository,
             PasswordEncoder passwordEncoder,
             RoleRepository roleRepository) {
+        super(usuarioRepository);
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
@@ -68,4 +73,5 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         return usuarioRepository.save(usuario);
     }
+
 }

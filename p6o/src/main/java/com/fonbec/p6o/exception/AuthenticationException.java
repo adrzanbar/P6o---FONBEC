@@ -1,4 +1,4 @@
-package com.fonbec.p6o.security.exception;
+package com.fonbec.p6o.exception;
 
 import org.springframework.http.HttpStatus;
 
