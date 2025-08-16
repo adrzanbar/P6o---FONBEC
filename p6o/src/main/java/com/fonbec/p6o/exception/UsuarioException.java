@@ -2,6 +2,9 @@ package com.fonbec.p6o.exception;
 
 import org.springframework.http.HttpStatus;
 
+import lombok.Getter;
+
+@Getter
 public class UsuarioException extends RuntimeException {
 
     final HttpStatus status;

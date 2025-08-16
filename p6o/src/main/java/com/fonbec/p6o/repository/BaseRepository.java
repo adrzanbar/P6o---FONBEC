@@ -1,7 +1,6 @@
 package com.fonbec.p6o.repository;
 
 import java.lang.reflect.ParameterizedType;
-import java.util.Arrays;
 import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
@@ -11,15 +10,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import com.fonbec.p6o.util.SpecificationUtils;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.repository.NoRepositoryBean;
-
-import java.lang.reflect.ParameterizedType;
-import java.util.Map;
 
 @NoRepositoryBean
 public interface BaseRepository<T, K> 

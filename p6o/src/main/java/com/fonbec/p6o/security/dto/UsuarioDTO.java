@@ -15,7 +15,7 @@ import com.fonbec.p6o.util.validator.ValidRoles;
 @Setter
 public class UsuarioDTO {
 
-    @NotNull(message = "El ID es obligatorio", groups = { Actualizar.class, Eliminar.class })
+    @NotNull(message = "El ID es obligatorio", groups = { Eliminar.class })
     private String id;
 
     @NotBlank(message = "El nombre es obligatorio", groups = { Guardar.class, Actualizar.class })

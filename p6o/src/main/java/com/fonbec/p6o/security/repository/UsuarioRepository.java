@@ -1,7 +1,5 @@
 package com.fonbec.p6o.security.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.fonbec.p6o.repository.BaseRepository;
 import com.fonbec.p6o.security.entity.Usuario;
 

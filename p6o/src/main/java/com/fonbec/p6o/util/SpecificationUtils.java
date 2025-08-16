@@ -16,28 +16,21 @@ import java.util.stream.Collectors;
  * @param <T> Tipo de la entidad sobre la que se aplicará la especificación.
  */
 
-import org.springframework.data.jpa.domain.Specification;
-
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Root;
 import lombok.extern.slf4j.Slf4j;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 
-import java.lang.reflect.Field;
-import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class SpecificationUtils {
 
     public static <T> Specification<T> createSpecification(Class<T> entityClass, Map<String, Object> params) {
-        return (Root<T> root, jakarta.persistence.criteria.CriteriaQuery<?> query, CriteriaBuilder cb) -> {
+        return (Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
             Map<String, Field> campos = Arrays.stream(entityClass.getDeclaredFields())

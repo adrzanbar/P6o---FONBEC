@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.fonbec.p6o.exception.AuthenticationException;
 import com.fonbec.p6o.exception.BaseServiceException;
+import com.fonbec.p6o.exception.UsuarioException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -66,6 +67,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BaseServiceException.class)
     public ResponseEntity<Object> handleBaseServiceException(BaseServiceException ex) {
         return buildResponse(HttpStatus.UNAUTHORIZED, "Error de servicio: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(UsuarioException.class)
+    public ResponseEntity<Object> handleUsuarioException(UsuarioException ex) {
+        return buildResponse(ex.getStatus(), "Error de usuario: " + ex.getMessage());
     }
 
     

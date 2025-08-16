@@ -25,4 +25,12 @@ public abstract class BaseService<T, K> {
         Specification<T> spec = SpecificationUtils.createSpecification(entityClass, filtros);
         return specificationExecutor.findAll(spec, pageable);
     }
+
+    public abstract T guardar(T entity);
+
+    public abstract void borrar(K id);
+
+    public abstract T obtener(K id);
+
+    public abstract T actualizar(K key, T entity);
 }
